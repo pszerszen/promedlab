@@ -1,4 +1,4 @@
-package com.manager.labo.entites;
+package com.manager.labo.entities;
 
 import javax.persistence.*;
 import java.util.Date;

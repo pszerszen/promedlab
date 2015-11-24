@@ -1,7 +1,4 @@
-package com.manager.labo.entites;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+package com.manager.labo.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

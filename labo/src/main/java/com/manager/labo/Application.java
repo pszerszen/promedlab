@@ -1,24 +1,26 @@
 package com.manager.labo;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.manager.labo.entities.Icd;
+import com.manager.labo.service.IcdService;
 import org.hibernate.SessionFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 
 /**
- * Created by Piotr on 2015-11-23.
+ * @author Piotr
  */
+@Transactional
 public class Application {
 
     public static void main(String[] args) throws SQLException {
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("hibernate-context.xml", "applicationContext.xml");
+        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
+        IcdService icdService = context.getBean(IcdService.class);
         SessionFactory sessionFactory = context.getBean(SessionFactory.class);
-        sessionFactory.getCurrentSession();
+        Icd icd = icdService.getById(1L);
 
         context.close();
         System.out.println("App");

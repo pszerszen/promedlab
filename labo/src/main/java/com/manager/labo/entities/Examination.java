@@ -1,4 +1,4 @@
-package com.manager.labo.entites;
+package com.manager.labo.entities;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Piotr on 2015-11-23.
+ * @author Piotr
  */
 @Entity
 @Table(name = "examination")
