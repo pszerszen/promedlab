@@ -14,9 +14,8 @@ public class ExaminationDetails extends AbstractEntity {
     @JoinColumn(name = "examinationId", nullable = false)
     private Examination examination;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code", nullable = false, referencedColumnName = "code2")
-    private Icd code;
+    @Column(name = "code", nullable = false, columnDefinition = "varchar(3)")
+    private String code;
 
     @Column(name = "value", nullable = false, columnDefinition = "int(11)")
     private Integer value;
@@ -35,11 +34,11 @@ public class ExaminationDetails extends AbstractEntity {
         this.examination = examination;
     }
 
-    public Icd getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(final Icd code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 

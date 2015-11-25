@@ -25,9 +25,8 @@ public class Examination extends AbstractEntity {
     @Column(name = "birth", columnDefinition = "DATETIME", nullable = false)
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code", nullable = false, referencedColumnName = "code1")
-    private Icd code;
+    @Column(name = "code", nullable = false, columnDefinition = "varchar(1)")
+    private String code;
 
     @OneToMany(mappedBy = "examination", fetch = FetchType.LAZY)
     private Set<ExaminationDetails> examinationDetailses = new HashSet<>();
@@ -48,11 +47,11 @@ public class Examination extends AbstractEntity {
         this.date = date;
     }
 
-    public Icd getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(final Icd code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
