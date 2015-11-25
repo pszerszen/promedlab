@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Created by Piotr on 2015-11-23.
+ * @author Piotr
  */
 @Entity
 @Table(name = "icd")

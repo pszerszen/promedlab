@@ -1,6 +1,12 @@
 package com.manager.labo.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,14 +18,14 @@ import java.util.Set;
 @Table(name = "examination")
 public class Examination extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patientId", nullable = false)
     private Patient patient;
 
     @Column(name = "birth", columnDefinition = "DATETIME", nullable = false)
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code", nullable = false, referencedColumnName = "code1")
     private Icd code;
 

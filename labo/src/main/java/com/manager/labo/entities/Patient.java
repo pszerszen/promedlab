@@ -2,6 +2,7 @@ package com.manager.labo.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class Patient extends AbstractEntity {
     @Column(name = "birth", columnDefinition = "DATE", nullable = false)
     private Date birth;
 
-    @OneToMany
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private Set<Examination> examinations = new HashSet<>();
 
     public String getFirstName() {
@@ -112,5 +113,13 @@ public class Patient extends AbstractEntity {
 
     public void setBirth(final Date birth) {
         this.birth = birth;
+    }
+
+    public Set<Examination> getExaminations() {
+        return examinations;
+    }
+
+    public void setExaminations(final Set<Examination> examinations) {
+        this.examinations = examinations;
     }
 }

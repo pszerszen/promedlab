@@ -4,24 +4,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by Piotr on 2015-11-23.
+ * @author Piotr
  */
 @Entity
 @Table(name = "examination_details")
 public class ExaminationDetails extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "examinationId", nullable = false)
     private Examination examination;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code", nullable = false, referencedColumnName = "code2")
     private Icd code;
 
     @Column(name = "value", nullable = false, columnDefinition = "int(11)")
     private Integer value;
 
-    @Column(name = "staff_name", nullable = false, columnDefinition = "varchar(100")
+    @Column(name = "staff_name", nullable = false, columnDefinition = "varchar(100)")
     private String staffName;
 
     @Column(name = "birth", columnDefinition = "DATETIME", nullable = false)
