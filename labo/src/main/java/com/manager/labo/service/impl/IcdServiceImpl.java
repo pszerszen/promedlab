@@ -1,7 +1,8 @@
-package com.manager.labo.service;
+package com.manager.labo.service.impl;
 
 import com.manager.labo.dao.IcdDao;
 import com.manager.labo.entities.Icd;
+import com.manager.labo.service.IcdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class IcdServiceImpl implements IcdService{
+public class IcdServiceImpl implements IcdService {
 
     @Autowired
     private IcdDao icdDao;

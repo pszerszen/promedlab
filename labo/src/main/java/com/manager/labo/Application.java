@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.sql.SQLException;
 
 /**
@@ -23,6 +24,8 @@ public class Application {
         Icd icd = icdService.getById(1L);
 
         context.close();
+
+
         System.out.println("App");
     }
 }
