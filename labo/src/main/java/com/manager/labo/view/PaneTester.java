@@ -8,20 +8,15 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.manager.labo.view.components.JPanelEnchancer;
+
 public class PaneTester extends JFrame implements ActionListener, KeyListener {
 
     public PaneTester(JPanel jPanel) {
-        super();
-        setSize(jPanel.getSize());
-        getContentPane().add(jPanel);
-        setVisible(true);
-    }
-
-    public PaneTester(ExaminationRequest jPanel) {
         this();
         setSize(jPanel.getSize());
-        getContentPane().add(jPanel);
-        jPanel.addListeners(this, this);
+        setContentPane(jPanel);
+        new JPanelEnchancer(jPanel).addListeners(this, this);
         setVisible(true);
     }
 
@@ -33,7 +28,7 @@ public class PaneTester extends JFrame implements ActionListener, KeyListener {
     private static final long serialVersionUID = -2906661714721221941L;
 
     public static void main(String[] args) {
-        new PaneTester(new ExaminationRequest());
+        new PaneTester(new ExaminationList());
     }
 
     @Override

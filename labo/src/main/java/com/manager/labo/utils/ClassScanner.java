@@ -1,4 +1,4 @@
-package com.mkyong.utils;
+package com.manager.labo.utils;
 
 import java.io.File;
 import java.net.URL;

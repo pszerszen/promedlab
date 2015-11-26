@@ -1,20 +1,30 @@
 package com.manager.labo.view;
 
-import javax.swing.*;
-
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Rectangle;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.util.Arrays;
-import java.util.function.Consumer;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
+
+import com.manager.labo.view.components.JPanelEnchancer;
+import com.manager.labo.view.components.LaboTableModel;
+import com.manager.labo.view.components.TableModelName;
 
 /**
  * @author pszerszen
@@ -38,10 +48,10 @@ public class ExaminationRequest extends JPanel {
     private JTextField client;
     private JTextField nrKg;
     private JTable examinationTable;
-    private DefaultTableModel examinationTableModel;
+    private LaboTableModel examinationTableModel;
     private JTextField discount;
     private JTable materialTable;
-    private DefaultTableModel materialTableModel;
+    private LaboTableModel materialTableModel;
     private JComboBox<String> registrationDate;
     private JComboBox<String> requestType;
     private JCheckBox chckbxUnknownBirthday;
@@ -282,22 +292,7 @@ public class ExaminationRequest extends JPanel {
         panel_15.setBounds(425, 77, 565, 420);
         add(panel_15);
         panel_15.setLayout(null);
-        examinationTableModel = new DefaultTableModel(
-                new String[] {"Kod badania", "Nazwa", "Uwagi", "Wartość"
-                }, 0) {
-            private static final long serialVersionUID = -5462480773278412043L;
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-
-            @Override
-            public Class<String> getColumnClass(int columnIndex) {
-                return String.class;
-            }
-
-        };
+        examinationTableModel = new LaboTableModel<>(TableModelName.REQUESTED_EXAMINATIONS, "Kod badania", "Nazwa", "Uwagi", "Wartość");
 
         examinationTable = new JTable();
         examinationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -344,22 +339,7 @@ public class ExaminationRequest extends JPanel {
         add(panel_16);
         panel_16.setLayout(null);
 
-        materialTableModel = new DefaultTableModel(
-                new String[] {"Materiał", "Pobrany przez"
-                }, 0) {
-            private static final long serialVersionUID = -5462480773278412043L;
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-
-            @Override
-            public Class<String> getColumnClass(int columnIndex) {
-                return String.class;
-            }
-
-        };
+        materialTableModel = new LaboTableModel<>(TableModelName.MATERIAL_TO_COLLECT, "Materiał", "Pobrany przez");
 
         materialTable = new JTable();
         materialTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -377,47 +357,7 @@ public class ExaminationRequest extends JPanel {
         btnOznaczMateriaJako.setBounds(425, 21, 130, 57);
         panel_16.add(btnOznaczMateriaJako);
 
-        standardActions();
-    }
-
-    public void addListeners(ActionListener actionListener, KeyListener keyListener) {
-        Arrays.asList(getClass().getDeclaredFields())
-                .stream()
-                .filter(field -> field.getType().equals(JButton.class))
-                .forEach(buttonField -> {
-                    try {
-                        final JButton button = (JButton) buttonField.get(this);
-                        button.addActionListener(actionListener);
-                        button.addKeyListener(keyListener);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-    }
-
-    private void standardActions() {
-        final Font calibriPlain14 = new Font("Calibri", Font.PLAIN, 14);
-        standardActionsForComponent(JButton.class, jButton -> {
-            jButton.setFont(calibriPlain14);
-        });
-        standardActionsForComponent(JLabel.class, label -> {
-            label.setFont(calibriPlain14);
-        });
-    }
-
-    private <C extends JComponent> void standardActionsForComponent(Class<C> type, Consumer<C> action) {
-        Arrays.asList(getClass().getDeclaredFields())
-                .stream()
-                .filter(field -> field.getType().equals(type))
-                .forEach(componentField -> {
-                    try {
-                        @SuppressWarnings("unchecked")
-                        C comp = (C) componentField.get(this);
-                        action.accept(comp);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+        new JPanelEnchancer(this).standardActions();
     }
 
 }
