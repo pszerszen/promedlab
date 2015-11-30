@@ -11,6 +11,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.manager.labo.utils.ActionCommand;
+
 public final class JPanelEnchancer {
 
     private JPanel panel;
@@ -19,22 +21,34 @@ public final class JPanelEnchancer {
         this.panel = panel;
     }
 
-    public void addListeners(ActionListener actionListener, KeyListener keyListener) {
-        Arrays.asList(getClass().getDeclaredFields())
+    public JPanelEnchancer initButtonsActionCommands() {
+        Arrays.asList(panel.getClass().getDeclaredFields())
                 .stream()
-                .filter(field -> field.getType().equals(JButton.class))
+                .filter(field -> field.getType().equals(JButton.class) && field.isAnnotationPresent(ActionCommand.class))
                 .forEach(buttonField -> {
                     try {
-                        final JButton button = (JButton) buttonField.get(panel);
-                        button.addActionListener(actionListener);
-                        button.addKeyListener(keyListener);
+                        buttonField.setAccessible(true);
+                        JButton button = (JButton) buttonField.get(panel);
+                        button.setActionCommand(buttonField.getAnnotation(ActionCommand.class).value());
                     } catch (Exception e) {
+                        // TODO remove action
                         e.printStackTrace();
                     }
                 });
+
+        return this;
     }
 
-    public void standardActions() {
+    public JPanelEnchancer addListeners(ActionListener actionListener, KeyListener keyListener) {
+        standardActionsForComponent(JButton.class, button -> {
+            button.addActionListener(actionListener);
+            button.addKeyListener(keyListener);
+        });
+
+        return this;
+    }
+
+    public JPanelEnchancer standardActions() {
         final Font calibriPlain14 = new Font("Calibri", Font.PLAIN, 14);
         standardActionsForComponent(JButton.class, jButton -> {
             jButton.setFont(calibriPlain14);
@@ -43,20 +57,26 @@ public final class JPanelEnchancer {
         standardActionsForComponent(JLabel.class, label -> {
             label.setFont(calibriPlain14);
         });
+
+        return this;
     }
 
-    public <C extends JComponent> void standardActionsForComponent(Class<C> type, Consumer<C> action) {
-        Arrays.asList(getClass().getDeclaredFields())
+    public <C extends JComponent> JPanelEnchancer standardActionsForComponent(Class<C> type, Consumer<C> action) {
+        Arrays.asList(panel.getClass().getDeclaredFields())
                 .stream()
                 .filter(field -> field.getType().equals(type))
                 .forEach(componentField -> {
                     try {
+                        componentField.setAccessible(true);
                         @SuppressWarnings("unchecked")
                         C comp = (C) componentField.get(panel);
                         action.accept(comp);
                     } catch (Exception e) {
+                        // TODO remove action
                         e.printStackTrace();
                     }
                 });
+
+        return this;
     }
 }

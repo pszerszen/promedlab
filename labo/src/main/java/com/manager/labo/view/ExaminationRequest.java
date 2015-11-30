@@ -357,7 +357,7 @@ public class ExaminationRequest extends JPanel {
         btnOznaczMateriaJako.setBounds(425, 21, 130, 57);
         panel_16.add(btnOznaczMateriaJako);
 
-        new JPanelEnchancer(this).standardActions();
+        new JPanelEnchancer(this).standardActions().initButtonsActionCommands();
     }
 
 }
