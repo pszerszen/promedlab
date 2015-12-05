@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.manager.labo.model.ExaminationModel;
+import com.manager.labo.model.ExaminationRequestModel;
 import com.manager.labo.view.components.JPanelEnchancer;
 
 public class PaneTester extends JFrame implements ActionListener, KeyListener {
@@ -28,7 +30,28 @@ public class PaneTester extends JFrame implements ActionListener, KeyListener {
     private static final long serialVersionUID = -2906661714721221941L;
 
     public static void main(String[] args) {
-        new PaneTester(new ExaminationList());
+        ExaminationRequestModel model = new ExaminationRequestModel();
+
+        model.setAddress1("address1");
+        model.setAddress2("address2");
+        model.setCity("city");
+        model.setExaminationId(0L);
+        model.setFirstName("name");
+        model.setLastName("surname");
+        model.setPesel("91080208596");
+        model.setPhone("798749030");
+        model.setZipCode("20-570");
+        model.addExamination(new ExaminationModel("A", "description A1"));
+        model.addExamination(new ExaminationModel("A", "description A2"));
+        model.addExamination(new ExaminationModel("A", "description A3"));
+        model.addExamination(new ExaminationModel("B", "description B1"));
+        model.addExamination(new ExaminationModel("B", "description B2"));
+        model.addExamination(new ExaminationModel("B", "description B3"));
+        model.addExamination(new ExaminationModel("C", "description C1"));
+        model.addExamination(new ExaminationModel("C", "description C2"));
+        model.addExamination(new ExaminationModel("C", "description C3"));
+
+        new PaneTester(new ExaminationDetails(model));
     }
 
     @Override

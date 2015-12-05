@@ -1,17 +1,20 @@
 package com.manager.labo.entities;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "patient")
 public class Patient extends AbstractEntity {
+
+    private static final long serialVersionUID = 2546508350350725655L;
 
     @Column(name = "firstname", columnDefinition = "varchar(100)", nullable = false)
     private String firstName;

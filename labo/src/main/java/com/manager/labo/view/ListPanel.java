@@ -17,9 +17,9 @@ import com.manager.labo.view.components.LaboTableModel;
 
 public abstract class ListPanel<T> extends JPanel {
 
-    private static final String EXIT = "Exit";
-
     private static final long serialVersionUID = -3579109254796950348L;
+
+    private static final String EXIT = "Exit";
 
     private static final String ADD = "Add";
 

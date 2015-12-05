@@ -5,8 +5,6 @@ import com.manager.labo.view.components.LaboTableModel;
 import com.manager.labo.view.components.TableModelName;
 
 public class ExaminationList extends ListPanel<ExaminationModel> {
-    public ExaminationList() {
-    }
 
     private static final long serialVersionUID = -3461903130827603302L;
 

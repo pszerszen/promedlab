@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @Table(name = "icd")
 public class Icd extends AbstractEntity {
 
+    private static final long serialVersionUID = 737118698885140108L;
+
     @Column(name = "code1", columnDefinition = "varchar(1)", nullable = false)
     private String code1;
 

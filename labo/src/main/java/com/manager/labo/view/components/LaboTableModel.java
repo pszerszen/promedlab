@@ -2,6 +2,7 @@ package com.manager.labo.view.components;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
@@ -40,11 +41,15 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
         });
         super.setNumRows(rowCount);
     }
+    
+    public void addRows(List<M> models){
+        models.forEach(this::addRow);
+    }
 
     public void addRow(M model) {
-        final Field[] fields = model.getClass().getFields();
         Map<Integer, String> row = new HashMap<>();
-        for (Field field : fields) {
+        for (Field field : model.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
             DisplayInJTable[] displayInJTables = field.getAnnotationsByType(DisplayInJTable.class);
             for (DisplayInJTable displayInJTable : displayInJTables) {
                 if (name.equals(displayInJTable.name())) {

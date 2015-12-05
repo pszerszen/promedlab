@@ -1,7 +1,13 @@
 package com.manager.labo.entities;
 
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Piotr
@@ -9,6 +15,8 @@ import java.util.Date;
 @Entity
 @Table(name = "examination_details")
 public class ExaminationDetails extends AbstractEntity {
+
+    private static final long serialVersionUID = 6191062375609571026L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "examinationId", nullable = false)
