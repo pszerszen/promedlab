@@ -3,6 +3,8 @@ package com.manager.labo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.manager.labo.utils.MappingField;
 
 public class ExaminationRequestModel {
@@ -128,4 +130,21 @@ public class ExaminationRequestModel {
         }
         examinations.remove(examinationModel);
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append(examinationId)
+                .append(firstName)
+                .append(lastName)
+                .append(pesel)
+                .append(address1)
+                .append(address2)
+                .append(zipCode)
+                .append(city)
+                .append(phone)
+                .append(examinations)
+                .build();
+    }
+    
 }

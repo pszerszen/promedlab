@@ -3,6 +3,7 @@ package com.manager.labo.view;
 import java.awt.Dimension;
 import java.lang.reflect.Field;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,17 +22,18 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Strings;
 import com.manager.labo.model.ExaminationModel;
 import com.manager.labo.model.ExaminationRequestModel;
+import com.manager.labo.utils.ActionCommand;
 import com.manager.labo.utils.MappingField;
 import com.manager.labo.view.components.JPanelEnchancer;
 import com.manager.labo.view.components.LaboTableModel;
 import com.manager.labo.view.components.TableModelName;
 
 public class ExaminationDetails extends JPanel {
-    
+
     private static final long serialVersionUID = -8066527372257354621L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExaminationDetails.class);
-    
+
     private ExaminationRequestModel model;
 
     private LaboTableModel<ExaminationModel> examinationTableModel;
@@ -58,8 +60,10 @@ public class ExaminationDetails extends JPanel {
 
     private JComboBox<String> availableExamination;
 
+    @ActionCommand("add-to-examinations")
     private JButton addToExaminations;
 
+    @ActionCommand("remove-from-examinations")
     private JButton removeFromExaminations;
 
     private JLabel lblTelefon;
@@ -77,8 +81,8 @@ public class ExaminationDetails extends JPanel {
     private JLabel lblNazwisko;
 
     private JLabel lblImi;
-    
-    public ExaminationDetails(){
+
+    public ExaminationDetails() {
         this(null);
     }
 
@@ -184,42 +188,56 @@ public class ExaminationDetails extends JPanel {
         scrollPane.setViewportView(table);
 
         removeFromExaminations = new JButton("Usuń wybrane badanie z listy");
-
         removeFromExaminations.setBounds(717, 334, 230, 23);
         add(removeFromExaminations);
 
         new JPanelEnchancer(this).standardActions();
-        
+
         this.model = model;
-        if(model != null){
-            try {
-                mountValuesFromModel();
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                LOGGER.error("Error during setting up model values on UI", e);
-            }
+        if (model != null) {
+            mountValuesFromModel();
         }
     }
-    
-    private void mountValuesFromModel() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-        for(Field field : model.getClass().getDeclaredFields()){
-            final MappingField mappingField = field.getAnnotation(MappingField.class);
-            if (field.isAnnotationPresent(MappingField.class)){
-                String mappingName = Optional
-                        .ofNullable(Strings.emptyToNull(
-                                mappingField.value().trim()))
-                        .orElse(field.getName());
-                field.setAccessible(true);
-                final Object modelValue = field.get(model);
-                final Field swingField = this.getClass().getDeclaredField(mappingName);
-                swingField.setAccessible(true);
-                setValueToComponent(modelValue, (JTextComponent) swingField.get(this));
-            }
-        }
-        
+
+    public ExaminationRequestModel getModel() {
+        return model;
+    }
+
+    public void loadValuesToModel() {
+        mappingOperation((object, component) -> {
+            object = component.getText();
+        });
+
+        model.getExaminations().clear();
+        model.getExaminations().addAll(examinationTableModel.getModelList());
+    }
+
+    private void mountValuesFromModel() {
+        mappingOperation((object, component) -> {
+            component.setText(object.toString());
+        });
+
         examinationTableModel.addRows(model.getExaminations());
     }
-    
-    private void setValueToComponent(Object value, JTextComponent component){
-        component.setText(value.toString());
+
+    private void mappingOperation(BiConsumer<Object, JTextComponent> consumer) {
+        try {
+            for (Field field : model.getClass().getDeclaredFields()) {
+                final MappingField mappingField = field.getAnnotation(MappingField.class);
+                if (mappingField != null) {
+                    final String mappingName = Optional
+                            .ofNullable(Strings.emptyToNull(
+                                    mappingField.value().trim()))
+                            .orElse(field.getName());
+                    field.setAccessible(true);
+                    final Object modelValue = field.get(model);
+                    final Field swingField = this.getClass().getDeclaredField(mappingName);
+                    swingField.setAccessible(true);
+                    consumer.accept(modelValue, (JTextComponent) swingField.get(this));
+                }
+            }
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
+            LOGGER.error("Error during mapping values with UI.", e);
+        }
     }
 }

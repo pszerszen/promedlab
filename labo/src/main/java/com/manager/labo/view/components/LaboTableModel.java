@@ -1,6 +1,7 @@
 package com.manager.labo.view.components;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
     private static final long serialVersionUID = -1829166783442405688L;
 
     private final TableModelName name;
+
     private Map<Integer, M> modelTable;
 
     public LaboTableModel(TableModelName name, String... columns) {
@@ -41,9 +43,21 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
         });
         super.setNumRows(rowCount);
     }
-    
-    public void addRows(List<M> models){
+
+    public void addRows(List<M> models) {
         models.forEach(this::addRow);
+    }
+
+    public M getRowAsModel(int row) {
+        return modelTable.get(row);
+    }
+
+    public List<M> getModelList() {
+        List<M> list = new ArrayList<>();
+        for (int i = 0; i < modelTable.size(); i++) {
+            list.add(modelTable.get(i));
+        }
+        return list;
     }
 
     public void addRow(M model) {
@@ -55,8 +69,7 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
                 if (name.equals(displayInJTable.name())) {
                     try {
                         row.put(displayInJTable.order(), field.get(model).toString());
-                    } catch (Exception ignore) {
-                    }
+                    } catch (Exception ignore) {}
                 }
             }
         }
@@ -66,7 +79,7 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
         }
 
         addRow(tableRow);
-        modelTable.put(getRowCount(), model);
+        modelTable.put(getRowCount() - 1, model);
     }
 
     @Override

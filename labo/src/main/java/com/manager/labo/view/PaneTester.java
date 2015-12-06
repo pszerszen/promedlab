@@ -51,7 +51,8 @@ public class PaneTester extends JFrame implements ActionListener, KeyListener {
         model.addExamination(new ExaminationModel("C", "description C2"));
         model.addExamination(new ExaminationModel("C", "description C3"));
 
-        new PaneTester(new ExaminationDetails(model));
+        final ExaminationDetails jPanel = new ExaminationDetails(model);
+        new PaneTester(jPanel);
     }
 
     @Override

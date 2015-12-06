@@ -57,6 +57,7 @@ public final class JPanelEnchancer {
         standardActionsForComponent(JLabel.class, label -> {
             label.setFont(calibriPlain14);
         });
+        initButtonsActionCommands();
 
         return this;
     }

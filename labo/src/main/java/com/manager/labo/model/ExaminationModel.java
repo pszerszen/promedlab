@@ -1,5 +1,7 @@
 package com.manager.labo.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.manager.labo.utils.DisplayInJTable;
 import com.manager.labo.view.components.TableModelName;
 
@@ -32,6 +34,14 @@ public class ExaminationModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append(code)
+                .append(description)
+                .build();
     }
 
 }
