@@ -35,7 +35,7 @@ public class ExaminationRequestModel {
     @MappingField
     private String phone;
 
-    private List<ExaminationModel> examinations;
+    private List<ExaminationSummaryModel> examinations;
 
     public Long getExaminationId() {
         return examinationId;
@@ -109,26 +109,26 @@ public class ExaminationRequestModel {
         this.phone = phone;
     }
 
-    public List<ExaminationModel> getExaminations() {
+    public List<ExaminationSummaryModel> getExaminations() {
         return examinations;
     }
 
-    public void setExaminations(List<ExaminationModel> examinations) {
+    public void setExaminations(List<ExaminationSummaryModel> examinations) {
         this.examinations = examinations;
     }
     
-    public void addExamination(ExaminationModel examinationModel){
+    public void addExamination(ExaminationSummaryModel examinationSummaryModel){
         if(examinations == null){
             examinations = new ArrayList<>();
         }
-        examinations.add(examinationModel);
+        examinations.add(examinationSummaryModel);
     }
     
-    public void removeExamination(ExaminationModel examinationModel){
+    public void removeExamination(ExaminationSummaryModel examinationSummaryModel){
         if(examinations == null){
             examinations = new ArrayList<>();
         }
-        examinations.remove(examinationModel);
+        examinations.remove(examinationSummaryModel);
     }
 
     @Override

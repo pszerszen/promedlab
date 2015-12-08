@@ -25,7 +25,7 @@ public class Examination extends AbstractEntity {
     @JoinColumn(name = "patientId", nullable = false)
     private Patient patient;
 
-    @Column(name = "birth", columnDefinition = "DATETIME", nullable = false)
+    @Column(name = "date", columnDefinition = "DATETIME", nullable = false)
     private Date date;
 
     @Column(name = "code", nullable = false, columnDefinition = "varchar(1)")

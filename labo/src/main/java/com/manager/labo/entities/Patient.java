@@ -22,7 +22,7 @@ public class Patient extends AbstractEntity {
     @Column(name = "lastname", columnDefinition = "varchar(100)", nullable = false)
     private String lastName;
 
-    @Column(name = "pesel", columnDefinition = "varchar(11)", nullable = false)
+    @Column(name = "pesel", columnDefinition = "varchar(11)", nullable = false, unique = true)
     private String pesel;
 
     @Column(name = "address1", columnDefinition = "varchar(100)", nullable = false)

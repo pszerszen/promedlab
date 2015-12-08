@@ -20,8 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.manager.labo.model.ExaminationModel;
 import com.manager.labo.model.ExaminationRequestModel;
+import com.manager.labo.model.ExaminationSummaryModel;
+import com.manager.labo.model.PatientModel;
 import com.manager.labo.utils.ActionCommand;
 import com.manager.labo.utils.MappingField;
 import com.manager.labo.view.components.JPanelEnchancer;
@@ -36,7 +37,7 @@ public class ExaminationDetails extends JPanel {
 
     private ExaminationRequestModel model;
 
-    private LaboTableModel<ExaminationModel> examinationTableModel;
+    private LaboTableModel<ExaminationSummaryModel> examinationTableModel;
 
     private JTextField firstName;
 
@@ -81,6 +82,9 @@ public class ExaminationDetails extends JPanel {
     private JLabel lblNazwisko;
 
     private JLabel lblImi;
+
+    @ActionCommand("search-for-patient")
+    private JButton searchForPatient;
 
     public ExaminationDetails() {
         this(null);
@@ -194,6 +198,10 @@ public class ExaminationDetails extends JPanel {
         new JPanelEnchancer(this).standardActions();
 
         this.model = model;
+
+        searchForPatient = new JButton("<html>Szukaj<br/>pacjenta</html>");
+        searchForPatient.setBounds(104, 102, 120, 37);
+        add(searchForPatient);
         if (model != null) {
             mountValuesFromModel();
         }
@@ -203,24 +211,24 @@ public class ExaminationDetails extends JPanel {
         return model;
     }
 
+    public void mountValuesFromModel(PatientModel patientModel) {
+        mappingOperation(patientModel, this::setUpSwingComponentValues);
+    }
+
     public void loadValuesToModel() {
-        mappingOperation((object, component) -> {
-            object = component.getText();
-        });
+        mappingOperation(model, this::setUpModelValues);
 
         model.getExaminations().clear();
         model.getExaminations().addAll(examinationTableModel.getModelList());
     }
 
     private void mountValuesFromModel() {
-        mappingOperation((object, component) -> {
-            component.setText(object.toString());
-        });
+        mappingOperation(model, this::setUpSwingComponentValues);
 
         examinationTableModel.addRows(model.getExaminations());
     }
 
-    private void mappingOperation(BiConsumer<Object, JTextComponent> consumer) {
+    private void mappingOperation(Object model, BiConsumer<Object, JTextComponent> consumer) {
         try {
             for (Field field : model.getClass().getDeclaredFields()) {
                 final MappingField mappingField = field.getAnnotation(MappingField.class);
@@ -239,5 +247,13 @@ public class ExaminationDetails extends JPanel {
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
             LOGGER.error("Error during mapping values with UI.", e);
         }
+    }
+
+    private void setUpModelValues(Object object, JTextComponent component) {
+        object = component.getText();
+    }
+
+    private void setUpSwingComponentValues(Object object, JTextComponent component) {
+        component.setText(object.toString());
     }
 }

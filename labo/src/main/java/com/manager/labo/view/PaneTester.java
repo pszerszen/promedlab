@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.manager.labo.model.ExaminationModel;
+import com.manager.labo.model.ExaminationSummaryModel;
 import com.manager.labo.model.ExaminationRequestModel;
 import com.manager.labo.view.components.JPanelEnchancer;
 
@@ -41,15 +41,15 @@ public class PaneTester extends JFrame implements ActionListener, KeyListener {
         model.setPesel("91080208596");
         model.setPhone("798749030");
         model.setZipCode("20-570");
-        model.addExamination(new ExaminationModel("A", "description A1"));
-        model.addExamination(new ExaminationModel("A", "description A2"));
-        model.addExamination(new ExaminationModel("A", "description A3"));
-        model.addExamination(new ExaminationModel("B", "description B1"));
-        model.addExamination(new ExaminationModel("B", "description B2"));
-        model.addExamination(new ExaminationModel("B", "description B3"));
-        model.addExamination(new ExaminationModel("C", "description C1"));
-        model.addExamination(new ExaminationModel("C", "description C2"));
-        model.addExamination(new ExaminationModel("C", "description C3"));
+        model.addExamination(new ExaminationSummaryModel("A", "description A1"));
+        model.addExamination(new ExaminationSummaryModel("A", "description A2"));
+        model.addExamination(new ExaminationSummaryModel("A", "description A3"));
+        model.addExamination(new ExaminationSummaryModel("B", "description B1"));
+        model.addExamination(new ExaminationSummaryModel("B", "description B2"));
+        model.addExamination(new ExaminationSummaryModel("B", "description B3"));
+        model.addExamination(new ExaminationSummaryModel("C", "description C1"));
+        model.addExamination(new ExaminationSummaryModel("C", "description C2"));
+        model.addExamination(new ExaminationSummaryModel("C", "description C3"));
 
         final ExaminationDetails jPanel = new ExaminationDetails(model);
         new PaneTester(jPanel);

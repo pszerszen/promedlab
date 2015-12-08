@@ -1,23 +1,47 @@
 package com.manager.labo.model;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import com.manager.labo.utils.DisplayInJTable;
 import com.manager.labo.view.components.TableModelName;
 
 public class ExaminationModel {
 
-    @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 0)
+    private Long id;
+
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 0)
+    private String requestDate;
+
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 1)
     private String code;
 
-    @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 1)
-    private String description;
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 2)
+    private String pesel;
 
-    public ExaminationModel() {}
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 3)
+    private String lastName;
 
-    public ExaminationModel(String code, String description) {
-        this.code = code;
-        this.description = description;
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 4)
+    private String firstName;
+
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 5)
+    private String address;
+
+    @DisplayInJTable(name = TableModelName.REQUESTS, order = 6)
+    private String phone;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(String requestDate) {
+        this.requestDate = requestDate;
     }
 
     public String getCode() {
@@ -28,20 +52,44 @@ public class ExaminationModel {
         this.code = code;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPesel() {
+        return pesel;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append(code)
-                .append(description)
-                .build();
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
 }

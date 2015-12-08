@@ -31,7 +31,7 @@ public class ExaminationDetails extends AbstractEntity {
     @Column(name = "staff_name", nullable = false, columnDefinition = "varchar(100)")
     private String staffName;
 
-    @Column(name = "birth", columnDefinition = "DATETIME", nullable = false)
+    @Column(name = "date", columnDefinition = "DATETIME", nullable = false)
     private Date date;
 
     public Examination getExamination() {
