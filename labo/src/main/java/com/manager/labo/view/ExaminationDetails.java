@@ -2,6 +2,7 @@ package com.manager.labo.view;
 
 import java.awt.Dimension;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -24,6 +25,7 @@ import com.manager.labo.model.ExaminationRequestModel;
 import com.manager.labo.model.ExaminationSummaryModel;
 import com.manager.labo.model.PatientModel;
 import com.manager.labo.utils.ActionCommand;
+import com.manager.labo.utils.ActionCommands;
 import com.manager.labo.utils.MappingField;
 import com.manager.labo.view.components.JPanelEnchancer;
 import com.manager.labo.view.components.LaboTableModel;
@@ -61,10 +63,10 @@ public class ExaminationDetails extends JPanel {
 
     private JComboBox<String> availableExamination;
 
-    @ActionCommand("add-to-examinations")
+    @ActionCommand(ActionCommands.ADD_TO_EXAMINATIONS)
     private JButton addToExaminations;
 
-    @ActionCommand("remove-from-examinations")
+    @ActionCommand(ActionCommands.REMOVE_FROM_EXAMINATIONS)
     private JButton removeFromExaminations;
 
     private JLabel lblTelefon;
@@ -83,8 +85,11 @@ public class ExaminationDetails extends JPanel {
 
     private JLabel lblImi;
 
-    @ActionCommand("search-for-patient")
+    @ActionCommand(ActionCommands.SEARCH_FOR_PATIENT)
     private JButton searchForPatient;
+
+    @ActionCommand(ActionCommands.SWITCH_AVAILABLE_EXAMINATIONS)
+    private JComboBox<String> examinationGroup;
 
     public ExaminationDetails() {
         this(null);
@@ -202,6 +207,14 @@ public class ExaminationDetails extends JPanel {
         searchForPatient = new JButton("<html>Szukaj<br/>pacjenta</html>");
         searchForPatient.setBounds(104, 102, 120, 37);
         add(searchForPatient);
+
+        JLabel lblGrupaBada = new JLabel("Grupa badań");
+        lblGrupaBada.setBounds(10, 194, 80, 14);
+        add(lblGrupaBada);
+
+        examinationGroup = new JComboBox<String>();
+        examinationGroup.setBounds(104, 191, 603, 20);
+        add(examinationGroup);
         if (model != null) {
             mountValuesFromModel();
         }
@@ -220,6 +233,25 @@ public class ExaminationDetails extends JPanel {
 
         model.getExaminations().clear();
         model.getExaminations().addAll(examinationTableModel.getModelList());
+    }
+    
+    public void initExaminationGroups(List<String> groups){
+        groups.stream().forEach(examinationGroup::addItem);
+    }
+    
+    public String getCurrentExaminationGroup(){
+        final String selectedItem = (String) examinationGroup.getSelectedItem();
+        return selectedItem.substring(0, 1);
+    }
+    
+    public void rewriteAvailableExaminations(List<String> examinations){
+        availableExamination.removeAllItems();
+        examinations.stream().forEach(availableExamination::addItem);
+    }
+    
+    public String getCurrentExamination(){
+        final String selectedItem = (String) availableExamination.getSelectedItem();
+        return selectedItem.substring(0, 3);
     }
 
     private void mountValuesFromModel() {

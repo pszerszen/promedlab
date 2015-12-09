@@ -1,6 +1,7 @@
 package com.manager.labo.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,24 @@ public class IcdServiceImpl implements IcdService {
     @Override
     public List<Icd> getAllIcds() {
         return icdDao.getAll();
+    }
+
+    @Override
+    public List<String> getGroups() {
+        return getAllIcds()
+                .stream()
+                .map(icd -> icd.getCode1() + " - " + icd.getName1())
+                .collect(Collectors.toSet())
+                .stream()
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<String> getExaminationsFromGroup(String code) {
+        return getByCode1(code)
+                .stream()
+                .map(icd -> icd.getCode2() + " - " + icd.getName2())
+                .collect(Collectors.toList());
     }
 }

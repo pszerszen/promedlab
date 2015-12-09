@@ -3,22 +3,51 @@ package com.manager.labo.view.components;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.manager.labo.utils.ActionCommand;
 
 public final class JPanelEnchancer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPanelEnchancer.class);
+
     private JPanel panel;
 
     public JPanelEnchancer(JPanel panel) {
         this.panel = panel;
+    }
+
+    public JPanelEnchancer addAction(String actionCommand, ActionListener actionListener) {
+        try {
+            for (Field field : panel.getClass().getDeclaredFields()) {
+                final ActionCommand actionCommandAnnotation = field.getAnnotation(ActionCommand.class);
+                if (actionCommandAnnotation != null && actionCommand.equals(actionCommandAnnotation.value())) {
+                    field.setAccessible(true);
+                    final Object object = field.get(panel);
+                    if (object instanceof JButton) {
+                        ((JButton) object).addActionListener(actionListener);
+                    } else if (object instanceof JComboBox<?>) {
+                        ((JComboBox<?>) object).addActionListener(actionListener);
+                    } else {
+                        LOGGER.error("Cannot add ActionListener to field {} of type {}", field.getName(), object.getClass().getCanonicalName());
+                    }
+                }
+            }
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            LOGGER.error("Error while attaching action:", e);
+        }
+        return this;
     }
 
     public JPanelEnchancer initButtonsActionCommands() {

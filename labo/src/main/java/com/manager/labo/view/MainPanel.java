@@ -4,19 +4,20 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.manager.labo.utils.ActionCommand;
+import com.manager.labo.utils.ActionCommands;
 import com.manager.labo.view.components.JPanelEnchancer;
 
 public class MainPanel extends JPanel {
 
     private static final long serialVersionUID = 7268693817742360861L;
 
-    @ActionCommand("Examination-Add")
+    @ActionCommand(ActionCommands.EXAMINATION_ADD)
     private JButton btnNewRequest;
 
-    @ActionCommand("Patient-List")
+    @ActionCommand(ActionCommands.PATIENT_LIST)
     private JButton btnPatientsLists;
 
-    @ActionCommand("Examination-List")
+    @ActionCommand(ActionCommands.EXAMINATION_LIST)
     private JButton btnExaminationList;
 
     public MainPanel() {
