@@ -22,13 +22,13 @@ public class Patient extends AbstractEntity {
     @Column(name = "lastname", columnDefinition = "varchar(100)", nullable = false)
     private String lastName;
 
-    @Column(name = "pesel", columnDefinition = "varchar(11)", nullable = false, unique = true)
+    @Column(name = "pesel", columnDefinition = "varchar(11)", nullable = true, unique = true)
     private String pesel;
 
     @Column(name = "address1", columnDefinition = "varchar(100)", nullable = false)
     private String address1;
 
-    @Column(name = "address2", columnDefinition = "varchar(100)", nullable = false)
+    @Column(name = "address2", columnDefinition = "varchar(100)", nullable = true)
     private String address2;
 
     @Column(name = "city", columnDefinition = "varchar(100)", nullable = false)

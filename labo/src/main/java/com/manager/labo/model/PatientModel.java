@@ -13,6 +13,9 @@ public class PatientModel {
     private String pesel;
 
     @MappingField
+    private String birthDay;
+
+    @MappingField
     @DisplayInJTable(name = TableModelName.PATIENTS, order = 1)
     private String lastName;
 
@@ -91,6 +94,30 @@ public class PatientModel {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }

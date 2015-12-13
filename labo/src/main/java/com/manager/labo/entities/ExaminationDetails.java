@@ -25,10 +25,10 @@ public class ExaminationDetails extends AbstractEntity {
     @Column(name = "code", nullable = false, columnDefinition = "varchar(3)")
     private String code;
 
-    @Column(name = "value", nullable = false, columnDefinition = "int(11)")
+    @Column(name = "value", nullable = true, columnDefinition = "int(11)")
     private Integer value;
 
-    @Column(name = "staff_name", nullable = false, columnDefinition = "varchar(100)")
+    @Column(name = "staff_name", nullable = true, columnDefinition = "varchar(100)")
     private String staffName;
 
     @Column(name = "date", columnDefinition = "DATETIME", nullable = false)

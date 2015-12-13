@@ -51,6 +51,14 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
     public M getRowAsModel(int row) {
         return modelTable.get(row);
     }
+    
+    public List<M> getRowsAsModels(int... rows){
+        List<M> list = new ArrayList<>();
+        for(int row : rows){
+            list.add(getRowAsModel(row));
+        }
+        return list;
+    }
 
     public List<M> getModelList() {
         List<M> list = new ArrayList<>();

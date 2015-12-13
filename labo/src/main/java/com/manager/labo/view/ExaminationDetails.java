@@ -11,9 +11,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
@@ -91,6 +93,14 @@ public class ExaminationDetails extends JPanel {
     @ActionCommand(ActionCommands.SWITCH_AVAILABLE_EXAMINATIONS)
     private JComboBox<String> examinationGroup;
 
+    private JTextField birthDay;
+
+    @ActionCommand(ActionCommands.EXAMINATION_SUBMIT)
+    private JButton submit;
+
+    @ActionCommand(ActionCommands.EXIT)
+    private JButton exit;
+
     public ExaminationDetails() {
         this(null);
     }
@@ -119,11 +129,11 @@ public class ExaminationDetails extends JPanel {
         lastName.setColumns(10);
 
         lblPesel = new JLabel("PESEL");
-        lblPesel.setBounds(10, 81, 80, 14);
+        lblPesel.setBounds(10, 109, 80, 14);
         add(lblPesel);
 
         pesel = new JTextField();
-        pesel.setBounds(104, 78, 120, 20);
+        pesel.setBounds(104, 106, 120, 20);
         add(pesel);
         pesel.setColumns(10);
 
@@ -191,13 +201,13 @@ public class ExaminationDetails extends JPanel {
         scrollPane.setBounds(10, 269, 697, 246);
         add(scrollPane);
 
-        examinationTableModel = new LaboTableModel<>(TableModelName.EXAMINATIONS_SET, "Kod badania", "Nazwa Badania");
+        examinationTableModel = new LaboTableModel<>(TableModelName.EXAMINATIONS_SET, "Kod badania", "Nazwa Badania", "Badający", "Wynik");
 
         table = new JTable(examinationTableModel);
         scrollPane.setViewportView(table);
 
         removeFromExaminations = new JButton("Usuń wybrane badanie z listy");
-        removeFromExaminations.setBounds(717, 334, 230, 23);
+        removeFromExaminations.setBounds(717, 281, 230, 23);
         add(removeFromExaminations);
 
         new JPanelEnchancer(this).standardActions();
@@ -205,7 +215,7 @@ public class ExaminationDetails extends JPanel {
         this.model = model;
 
         searchForPatient = new JButton("<html>Szukaj<br/>pacjenta</html>");
-        searchForPatient.setBounds(104, 102, 120, 37);
+        searchForPatient.setBounds(104, 130, 120, 37);
         add(searchForPatient);
 
         JLabel lblGrupaBada = new JLabel("Grupa badań");
@@ -215,6 +225,58 @@ public class ExaminationDetails extends JPanel {
         examinationGroup = new JComboBox<String>();
         examinationGroup.setBounds(104, 191, 603, 20);
         add(examinationGroup);
+
+        JLabel lblDataUrodzenia = new JLabel("Data Urodzenia");
+        lblDataUrodzenia.setBounds(10, 81, 80, 14);
+        add(lblDataUrodzenia);
+
+        birthDay = new JTextField();
+        birthDay.setBounds(104, 78, 120, 20);
+        add(birthDay);
+        birthDay.setColumns(10);
+
+        submit = new JButton("Zapisz");
+        submit.setBounds(717, 541, 89, 23);
+        add(submit);
+
+        exit = new JButton("Wyjdź");
+        exit.setBounds(717, 575, 89, 23);
+        add(exit);
+
+        JPanel panel = new JPanel();
+        panel.setBorder(new TitledBorder(null, "Wprowad\u017A wynik badania", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+        panel.setBounds(717, 315, 230, 207);
+        add(panel);
+        panel.setLayout(null);
+
+        JLabel lblWykonujcyBadanie = new JLabel("Wykonujący badanie");
+        lblWykonujcyBadanie.setBounds(10, 24, 100, 14);
+        panel.add(lblWykonujcyBadanie);
+
+        JTextField examiner = new JTextField();
+        examiner.setBounds(10, 44, 210, 20);
+        panel.add(examiner);
+        examiner.setColumns(10);
+
+        JLabel lblWynikBadania = new JLabel("Wynik badania");
+        lblWynikBadania.setBounds(10, 75, 220, 14);
+        panel.add(lblWynikBadania);
+
+        JSpinner examinationValue = new JSpinner();
+        examinationValue.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
+        examinationValue.setBounds(10, 100, 210, 20);
+        panel.add(examinationValue);
+
+        JButton addExaminationValue = new JButton("Dodaj wynik badań");
+        addExaminationValue.setBounds(10, 173, 210, 23);
+        addExaminationValue.addActionListener(e -> {
+            for(int row : table.getSelectedRows()){
+                model.getExaminations().get(row).setStaffNameAndValue(examiner.getText(), (int) examinationValue.getValue());
+            }
+            mountValuesFromModel();
+        });
+        panel.add(addExaminationValue);
+        
         if (model != null) {
             mountValuesFromModel();
         }
@@ -234,29 +296,46 @@ public class ExaminationDetails extends JPanel {
         model.getExaminations().clear();
         model.getExaminations().addAll(examinationTableModel.getModelList());
     }
-    
-    public void initExaminationGroups(List<String> groups){
+
+    public void initExaminationGroups(List<String> groups) {
         groups.stream().forEach(examinationGroup::addItem);
     }
-    
-    public String getCurrentExaminationGroup(){
+
+    public String getCurrentExaminationGroup() {
         final String selectedItem = (String) examinationGroup.getSelectedItem();
         return selectedItem.substring(0, 1);
     }
-    
-    public void rewriteAvailableExaminations(List<String> examinations){
+
+    public void rewriteAvailableExaminations(List<String> examinations) {
         availableExamination.removeAllItems();
         examinations.stream().forEach(availableExamination::addItem);
     }
-    
-    public String getCurrentExamination(){
+
+    public String getPesel() {
+        return pesel.getText();
+    }
+
+    public String getCurrentExamination() {
         final String selectedItem = (String) availableExamination.getSelectedItem();
         return selectedItem.substring(0, 3);
+    }
+
+    public void addExaminationDetail(ExaminationSummaryModel model) {
+        examinationTableModel.addRow(model);
+    }
+
+    public void removeSelectedExamiantionFromTable() {
+        examinationTableModel.removeRow(table.getSelectedRow());
+    }
+
+    public void mountValuesFromModel(Object model) {
+        mappingOperation(model, this::setUpSwingComponentValues);
     }
 
     private void mountValuesFromModel() {
         mappingOperation(model, this::setUpSwingComponentValues);
 
+        examinationTableModel.setNumRows(0);
         examinationTableModel.addRows(model.getExaminations());
     }
 

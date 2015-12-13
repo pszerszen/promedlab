@@ -6,6 +6,8 @@ public final class ActionCommands {
     public static final String EXAMINATION_LIST = "Examination-List";
     public static final String PATIENT_LIST = "Patient-List";
     public static final String EXAMINATION_ADD = "Examination-Add";
+    public static final String EXAMINATION_SUBMIT = "Examination-Submit";
+    public static final String EXAMINATION_ADD_VALUE = "Examination-Add-Value";
     public static final String EXIT = "Exit";
     public static final String SWITCH_AVAILABLE_EXAMINATIONS = "switch-available-examinations";
     public static final String SEARCH_FOR_PATIENT = "search-for-patient";

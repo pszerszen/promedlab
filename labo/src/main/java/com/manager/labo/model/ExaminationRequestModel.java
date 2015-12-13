@@ -21,6 +21,9 @@ public class ExaminationRequestModel {
     private String pesel;
 
     @MappingField
+    private String birthDay;
+
+    @MappingField
     private String address1;
 
     @MappingField
@@ -67,6 +70,14 @@ public class ExaminationRequestModel {
 
     public void setPesel(String pesel) {
         this.pesel = pesel;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
     }
 
     public String getAddress1() {
@@ -116,16 +127,16 @@ public class ExaminationRequestModel {
     public void setExaminations(List<ExaminationSummaryModel> examinations) {
         this.examinations = examinations;
     }
-    
-    public void addExamination(ExaminationSummaryModel examinationSummaryModel){
-        if(examinations == null){
+
+    public void addExamination(ExaminationSummaryModel examinationSummaryModel) {
+        if (examinations == null) {
             examinations = new ArrayList<>();
         }
         examinations.add(examinationSummaryModel);
     }
-    
-    public void removeExamination(ExaminationSummaryModel examinationSummaryModel){
-        if(examinations == null){
+
+    public void removeExamination(ExaminationSummaryModel examinationSummaryModel) {
+        if (examinations == null) {
             examinations = new ArrayList<>();
         }
         examinations.remove(examinationSummaryModel);
@@ -146,5 +157,5 @@ public class ExaminationRequestModel {
                 .append(examinations)
                 .build();
     }
-    
+
 }

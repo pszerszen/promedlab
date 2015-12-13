@@ -12,7 +12,7 @@ public class PatientList extends ListPanel<PatientModel> {
 
     @Override
     protected void initTableModel() {
-        tableModel = new LaboTableModel<PatientModel>(TableModelName.PATIENTS, "PESEL", "Nazwisko", "Imię", "Adres", "Telefon", "Data zlecenia");
+        tableModel = new LaboTableModel<PatientModel>(TableModelName.PATIENTS, "PESEL", "Nazwisko", "Imię", "Adres", "Telefon");
     }
 
     @Override

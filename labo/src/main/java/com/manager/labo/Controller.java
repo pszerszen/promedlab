@@ -9,6 +9,9 @@ import javax.swing.JPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.manager.labo.entities.Icd;
+import com.manager.labo.model.ExaminationSummaryModel;
+import com.manager.labo.model.PatientModel;
 import com.manager.labo.service.ExaminationService;
 import com.manager.labo.service.IcdService;
 import com.manager.labo.service.PatientService;
@@ -75,12 +78,11 @@ public class Controller extends JFrame implements ActionListener {
             patientList = new PatientList();
             new JPanelEnchancer(patientList)
                     .addAction(ActionCommands.EXIT, e -> {
-                        System.exit(0);
+                        setPatientList();
                     })
                     .addListeners(this, null);
         }
-        // TODO patient model list
-        patientList.reloadTable(null);
+        patientList.reloadTable(patientService.getPatientModels());
         setCurrentPanel(patientList);
     }
 
@@ -89,7 +91,7 @@ public class Controller extends JFrame implements ActionListener {
             examinationList = new ExaminationList();
             new JPanelEnchancer(examinationList)
                     .addAction(ActionCommands.EXIT, e -> {
-                        System.exit(0);
+                        setExaminationList();
                     })
                     .addListeners(this, null);
         }
@@ -105,16 +107,26 @@ public class Controller extends JFrame implements ActionListener {
                         examinationDetails.rewriteAvailableExaminations(
                                 icdService.getExaminationsFromGroup(
                                         examinationDetails.getCurrentExaminationGroup()));
-            })
+                    })
                     .addAction(ActionCommands.SEARCH_FOR_PATIENT, e -> {
-
-            })
+                        PatientModel model = patientService.getPatientModelByPesel(examinationDetails.getPesel());
+                        if (model != null) {
+                            examinationDetails.mountValuesFromModel(model);
+                        }
+                    })
                     .addAction(ActionCommands.REMOVE_FROM_EXAMINATIONS, e -> {
-
-            })
+                        examinationDetails.removeSelectedExamiantionFromTable();
+                    })
                     .addAction(ActionCommands.ADD_TO_EXAMINATIONS, e -> {
-
-            });
+                        final Icd icd = icdService.getByCode2(examinationDetails.getCurrentExamination());
+                        examinationDetails.addExaminationDetail(new ExaminationSummaryModel(icd.getCode2(), icd.getName2()));
+                    })
+                    .addAction(ActionCommands.EXIT, e -> {
+                        setMainPanel();
+                    })
+                    .addAction(ActionCommands.EXAMINATION_SUBMIT, e -> {
+                        
+                    });
         }
         setCurrentPanel(examinationDetails);
     }
