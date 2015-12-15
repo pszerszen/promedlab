@@ -20,4 +20,10 @@ public class ExaminationList extends ListPanel<ExaminationModel> {
         return EXAMINATION;
     }
 
+    @Override
+    protected String getActionButtonText() {
+        return "<html>Sczegóły/<br/>"
+                + "Wprowadź wyniki badań</html>";
+    }
+
 }

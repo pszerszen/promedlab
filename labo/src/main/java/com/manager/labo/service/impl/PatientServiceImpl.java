@@ -49,12 +49,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientModel getPatientModelById(Long id) {
+    public PatientModel getById(Long id) {
         return convert(get(id));
     }
 
     @Override
-    public List<PatientModel> getPatientModels() {
+    public List<PatientModel> getAll() {
         return patientDao.getAll()
                 .stream()
                 .map(this::convert)

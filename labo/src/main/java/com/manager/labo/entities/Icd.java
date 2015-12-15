@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * @author Piotr
  */
@@ -56,4 +58,16 @@ public class Icd extends AbstractEntity {
     public void setName2(final String name2) {
         this.name2 = name2;
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append(code1)
+                .append(name1)
+                .append(code2)
+                .append(name2)
+                .build();
+    }
+    
+    
 }

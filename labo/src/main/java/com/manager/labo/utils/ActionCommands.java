@@ -9,6 +9,8 @@ public final class ActionCommands {
     public static final String EXAMINATION_SUBMIT = "Examination-Submit";
     public static final String EXAMINATION_ADD_VALUE = "Examination-Add-Value";
     public static final String EXIT = "Exit";
+    public static final String RELOAD = "Reload";
+    public static final String BACK = "Back";
     public static final String SWITCH_AVAILABLE_EXAMINATIONS = "switch-available-examinations";
     public static final String SEARCH_FOR_PATIENT = "search-for-patient";
     public static final String REMOVE_FROM_EXAMINATIONS = "remove-from-examinations";

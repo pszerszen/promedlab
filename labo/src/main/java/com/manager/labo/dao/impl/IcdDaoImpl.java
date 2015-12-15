@@ -2,6 +2,7 @@ package com.manager.labo.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.manager.labo.dao.IcdDao;
@@ -25,7 +26,7 @@ public class IcdDaoImpl extends GenericDAOImpl<Icd> implements IcdDao {
     @Override
     public List<Icd> getByCode1(String code) {
         return getCurrentSession()
-                .createQuery("FROM Icd i WHERE i.code1 = :code")
+                .createQuery("FROM Icd i WHERE i.code1 = :code ORDER BY i.code2")
                 .setParameter("code", code)
                 .list();
     }
@@ -37,4 +38,14 @@ public class IcdDaoImpl extends GenericDAOImpl<Icd> implements IcdDao {
                 .setParameter("code", code)
                 .uniqueResult();
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Icd> getAll() {
+        String formula = "FROM Icd i ORDER BY i.code1";
+        Query query = getCurrentSession().createQuery(formula);
+
+        return query.list();
+    }
+
 }

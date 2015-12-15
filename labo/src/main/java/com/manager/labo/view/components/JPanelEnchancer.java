@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
 import com.manager.labo.utils.ActionCommand;
 
 public final class JPanelEnchancer {
@@ -60,7 +61,6 @@ public final class JPanelEnchancer {
                         JButton button = (JButton) buttonField.get(panel);
                         button.setActionCommand(buttonField.getAnnotation(ActionCommand.class).value());
                     } catch (Exception e) {
-                        // TODO remove action
                         e.printStackTrace();
                     }
                 });
@@ -92,7 +92,10 @@ public final class JPanelEnchancer {
     }
 
     public <C extends JComponent> JPanelEnchancer standardActionsForComponent(Class<C> type, Consumer<C> action) {
-        Arrays.asList(panel.getClass().getDeclaredFields())
+        new ImmutableList.Builder<Field>()
+                .add(panel.getClass().getSuperclass().getDeclaredFields())
+                .add(panel.getClass().getDeclaredFields())
+                .build()
                 .stream()
                 .filter(field -> field.getType().equals(type))
                 .forEach(componentField -> {

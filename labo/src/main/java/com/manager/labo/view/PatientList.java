@@ -20,4 +20,10 @@ public class PatientList extends ListPanel<PatientModel> {
         return PATIENT;
     }
 
+    @Override
+    protected String getActionButtonText() {
+        return "<html>Utwórz badanie<br/>"
+                + "dla pacjenta</html>";
+    }
+
 }

@@ -1,14 +1,12 @@
 package com.manager.labo.service;
 
-import java.util.List;
-
 import com.manager.labo.entities.Patient;
 import com.manager.labo.model.PatientModel;
 
 /**
  * @author pszerszen
  */
-public interface PatientService {
+public interface PatientService extends AbstractService<PatientModel> {
     
     Long create(PatientModel model);
     
@@ -19,8 +17,5 @@ public interface PatientService {
     Patient getByPesel(String pesel);
     
     PatientModel getPatientModelByPesel(String pesel);
-    
-    PatientModel getPatientModelById(Long id);
-    
-    List<PatientModel> getPatientModels();
+
 }

@@ -1,5 +1,7 @@
 package com.manager.labo.view;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -21,6 +23,7 @@ public class MainPanel extends JPanel {
     private JButton btnExaminationList;
 
     public MainPanel() {
+        setSize(new Dimension(440, 115));
         setLayout(null);
 
         btnNewRequest = new JButton("Nowe zlecenie");

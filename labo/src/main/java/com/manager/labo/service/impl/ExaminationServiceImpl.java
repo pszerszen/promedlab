@@ -42,24 +42,10 @@ public class ExaminationServiceImpl implements ExaminationService {
     private IcdService icdService;
 
     @Override
-    public List<ExaminationModel> getExaminationModels() {
+    public List<ExaminationModel> getAll() {
         return examinationDao.getAll()
                 .stream()
-                .map(examination -> {
-                    ExaminationModel model = new ExaminationModel();
-                    model.setId(examination.getId());
-                    model.setCode(examination.getCode());
-                    model.setRequestDate(DateUtils.fromDateTime(examination.getDate()));
-                    
-                    Patient patient = examination.getPatient();
-                    model.setPesel(patient.getPesel());
-                    model.setFirstName(patient.getFirstName());
-                    model.setLastName(patient.getLastName());
-                    model.setAddress(new StringJoiner(" ").add(patient.getAddress1()).add(patient.getAddress2()).toString());
-                    model.setPhone(patient.getPhone());
-                    
-                    return model;
-                })
+                .map(this::mapToExaminationModel)
                 .collect(Collectors.toList());
     }
 
@@ -106,5 +92,26 @@ public class ExaminationServiceImpl implements ExaminationService {
     public void update(ExaminationRequestModel examinationRequestModel) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public ExaminationModel getById(Long id) {
+        return mapToExaminationModel(examinationDao.get(id));
+    }
+    
+    private ExaminationModel mapToExaminationModel(Examination examination){
+        ExaminationModel model = new ExaminationModel();
+        model.setId(examination.getId());
+        model.setCode(examination.getCode());
+        model.setRequestDate(DateUtils.fromDateTime(examination.getDate()));
+        
+        Patient patient = examination.getPatient();
+        model.setPesel(patient.getPesel());
+        model.setFirstName(patient.getFirstName());
+        model.setLastName(patient.getLastName());
+        model.setAddress(new StringJoiner(" ").add(patient.getAddress1()).add(patient.getAddress2()).toString());
+        model.setPhone(patient.getPhone());
+        
+        return model;
     }
 }

@@ -48,6 +48,7 @@ public class IcdServiceImpl implements IcdService {
                 .map(icd -> icd.getCode1() + " - " + icd.getName1())
                 .collect(Collectors.toSet())
                 .stream()
+                .sorted()
                 .collect(Collectors.toList());
 
     }

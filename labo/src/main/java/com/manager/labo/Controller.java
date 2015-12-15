@@ -2,14 +2,20 @@ package com.manager.labo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.manager.labo.entities.Icd;
+import com.manager.labo.model.ExaminationModel;
+import com.manager.labo.model.ExaminationRequestModel;
 import com.manager.labo.model.ExaminationSummaryModel;
 import com.manager.labo.model.PatientModel;
 import com.manager.labo.service.ExaminationService;
@@ -22,10 +28,11 @@ import com.manager.labo.view.MainPanel;
 import com.manager.labo.view.PatientList;
 import com.manager.labo.view.components.JPanelEnchancer;
 
-@Component
-public class Controller extends JFrame implements ActionListener {
+public class Controller extends JFrame implements ActionListener, WindowListener {
 
     private static final long serialVersionUID = -8827922871122450688L;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 
     private MainPanel mainPanel;
 
@@ -35,26 +42,57 @@ public class Controller extends JFrame implements ActionListener {
 
     private ExaminationDetails examinationDetails;
 
-    @Autowired
     private IcdService icdService;
 
-    @Autowired
     private PatientService patientService;
 
-    @Autowired
     private ExaminationService examinationService;
+
+    private ConfigurableApplicationContext context;
 
     public Controller() {
         super("PRO-LAB-MANAGER");
+        
+        context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        icdService = context.getBean(IcdService.class);
+        patientService = context.getBean(PatientService.class);
+        examinationService = context.getBean(ExaminationService.class);
+        
         setMainPanel();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        LOGGER.debug("Action Performed: " + e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Patient-See":
+                final PatientModel currentModel = patientList.getCurrentModel();
+                if (currentModel != null) {
+                    examinationDetails = new ExaminationDetails();
+                    final PatientModel patientModel = patientService.getById(currentModel.getId());
+                    examinationDetails.mountValuesFromModel(patientModel);
+                    setExaminationDetailsActions();
+                }
                 break;
             case "Examination-See":
+                final ExaminationModel currentModel2 = examinationList.getCurrentModel();
+                if (currentModel2 != null) {
+                    final ExaminationRequestModel examinationModel = examinationService
+                            .getExaminationRequestModel(currentModel2.getId());
+                    examinationDetails = new ExaminationDetails(examinationModel);
+                    setExaminationDetailsActions();
+                }
+                break;
+            case ActionCommands.BACK:
+                setMainPanel();
+                break;
+            case "Patient-Reload":
+                patientList.reloadTable(patientService.getAll());
+                break;
+            case "Examination-Reload":
+                examinationList.reloadTable(examinationService.getAll());
                 break;
         }
     }
@@ -77,12 +115,9 @@ public class Controller extends JFrame implements ActionListener {
         if (patientList == null) {
             patientList = new PatientList();
             new JPanelEnchancer(patientList)
-                    .addAction(ActionCommands.EXIT, e -> {
-                        setPatientList();
-                    })
                     .addListeners(this, null);
         }
-        patientList.reloadTable(patientService.getPatientModels());
+        patientList.reloadTable(patientService.getAll());
         setCurrentPanel(patientList);
     }
 
@@ -90,18 +125,18 @@ public class Controller extends JFrame implements ActionListener {
         if (examinationList == null) {
             examinationList = new ExaminationList();
             new JPanelEnchancer(examinationList)
-                    .addAction(ActionCommands.EXIT, e -> {
-                        setExaminationList();
-                    })
                     .addListeners(this, null);
         }
-        examinationList.reloadTable(examinationService.getExaminationModels());
+        examinationList.reloadTable(examinationService.getAll());
         setCurrentPanel(examinationList);
     }
 
     private void setExaminationDetailsActions() {
         if (examinationDetails != null) {
             examinationDetails.initExaminationGroups(icdService.getGroups());
+            examinationDetails.rewriteAvailableExaminations(
+                    icdService.getExaminationsFromGroup(
+                            examinationDetails.getCurrentExaminationGroup()));
             new JPanelEnchancer(examinationDetails)
                     .addAction(ActionCommands.SWITCH_AVAILABLE_EXAMINATIONS, e -> {
                         examinationDetails.rewriteAvailableExaminations(
@@ -125,8 +160,9 @@ public class Controller extends JFrame implements ActionListener {
                         setMainPanel();
                     })
                     .addAction(ActionCommands.EXAMINATION_SUBMIT, e -> {
-                        
-                    });
+
+            });
+            
         }
         setCurrentPanel(examinationDetails);
     }
@@ -135,4 +171,34 @@ public class Controller extends JFrame implements ActionListener {
         setContentPane(jPanel);
         setSize(jPanel.getWidth() + 50, jPanel.getHeight() + 50);
     }
+
+    public static void main(String[] args) {
+        new Controller();
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {}
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        context.close();
+        e.getWindow().dispose();
+        this.dispose();
+        System.exit(EXIT_ON_CLOSE);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+
+    @Override
+    public void windowActivated(WindowEvent e) {}
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }

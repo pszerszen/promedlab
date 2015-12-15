@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -101,6 +102,18 @@ public class ExaminationDetails extends JPanel {
     @ActionCommand(ActionCommands.EXIT)
     private JButton exit;
 
+    private JLabel lblWykonujcyBadanie;
+
+    private JTextField examiner;
+
+    private JLabel lblWynikBadania;
+
+    private JSpinner examinationValue;
+
+    private JButton addExaminationValue;
+
+    private JLabel lblDataUrodzenia;
+
     public ExaminationDetails() {
         this(null);
     }
@@ -115,7 +128,7 @@ public class ExaminationDetails extends JPanel {
         add(lblImi);
 
         firstName = new JTextField();
-        firstName.setBounds(104, 28, 120, 20);
+        firstName.setBounds(109, 28, 120, 20);
         add(firstName);
         firstName.setColumns(10);
 
@@ -124,7 +137,7 @@ public class ExaminationDetails extends JPanel {
         add(lblNazwisko);
 
         lastName = new JTextField();
-        lastName.setBounds(104, 53, 120, 20);
+        lastName.setBounds(109, 53, 120, 20);
         add(lastName);
         lastName.setColumns(10);
 
@@ -133,52 +146,52 @@ public class ExaminationDetails extends JPanel {
         add(lblPesel);
 
         pesel = new JTextField();
-        pesel.setBounds(104, 106, 120, 20);
+        pesel.setBounds(109, 106, 120, 20);
         add(pesel);
         pesel.setColumns(10);
 
         lblAdres = new JLabel("Adres");
-        lblAdres.setBounds(252, 31, 80, 14);
+        lblAdres.setBounds(313, 31, 80, 14);
         add(lblAdres);
 
         lblAdresCd = new JLabel("Adres cd");
-        lblAdresCd.setBounds(252, 56, 80, 14);
+        lblAdresCd.setBounds(313, 56, 80, 14);
         add(lblAdresCd);
 
         lblKodPocztowy = new JLabel("Kod Pocztowy");
-        lblKodPocztowy.setBounds(252, 81, 80, 14);
+        lblKodPocztowy.setBounds(313, 81, 80, 14);
         add(lblKodPocztowy);
 
         lblMiasto = new JLabel("Miasto");
-        lblMiasto.setBounds(450, 81, 80, 14);
+        lblMiasto.setBounds(511, 81, 80, 14);
         add(lblMiasto);
 
         zipCode = new JTextField();
-        zipCode.setBounds(342, 78, 86, 20);
+        zipCode.setBounds(403, 78, 86, 20);
         add(zipCode);
         zipCode.setColumns(10);
 
         address2 = new JTextField();
-        address2.setBounds(342, 53, 188, 20);
+        address2.setBounds(403, 53, 188, 20);
         add(address2);
         address2.setColumns(10);
 
         address1 = new JTextField();
-        address1.setBounds(342, 28, 188, 20);
+        address1.setBounds(403, 28, 188, 20);
         add(address1);
         address1.setColumns(10);
 
         city = new JTextField();
-        city.setBounds(497, 78, 149, 20);
+        city.setBounds(558, 78, 149, 20);
         add(city);
         city.setColumns(10);
 
         lblTelefon = new JLabel("Telefon");
-        lblTelefon.setBounds(252, 106, 80, 14);
+        lblTelefon.setBounds(313, 106, 80, 14);
         add(lblTelefon);
 
         phone = new JTextField();
-        phone.setBounds(342, 103, 120, 20);
+        phone.setBounds(403, 103, 120, 20);
         add(phone);
         phone.setColumns(10);
 
@@ -210,12 +223,10 @@ public class ExaminationDetails extends JPanel {
         removeFromExaminations.setBounds(717, 281, 230, 23);
         add(removeFromExaminations);
 
-        new JPanelEnchancer(this).standardActions();
-
         this.model = model;
 
         searchForPatient = new JButton("<html>Szukaj<br/>pacjenta</html>");
-        searchForPatient.setBounds(104, 130, 120, 37);
+        searchForPatient.setBounds(109, 130, 120, 37);
         add(searchForPatient);
 
         JLabel lblGrupaBada = new JLabel("Grupa badań");
@@ -226,12 +237,12 @@ public class ExaminationDetails extends JPanel {
         examinationGroup.setBounds(104, 191, 603, 20);
         add(examinationGroup);
 
-        JLabel lblDataUrodzenia = new JLabel("Data Urodzenia");
-        lblDataUrodzenia.setBounds(10, 81, 80, 14);
+        lblDataUrodzenia = new JLabel("Data Urodzenia");
+        lblDataUrodzenia.setBounds(10, 81, 123, 14);
         add(lblDataUrodzenia);
 
         birthDay = new JTextField();
-        birthDay.setBounds(104, 78, 120, 20);
+        birthDay.setBounds(109, 78, 120, 20);
         add(birthDay);
         birthDay.setColumns(10);
 
@@ -249,37 +260,44 @@ public class ExaminationDetails extends JPanel {
         add(panel);
         panel.setLayout(null);
 
-        JLabel lblWykonujcyBadanie = new JLabel("Wykonujący badanie");
-        lblWykonujcyBadanie.setBounds(10, 24, 100, 14);
+        lblWykonujcyBadanie = new JLabel("Wykonujący badanie");
+        lblWykonujcyBadanie.setBounds(10, 24, 210, 14);
         panel.add(lblWykonujcyBadanie);
 
-        JTextField examiner = new JTextField();
+        examiner = new JTextField();
         examiner.setBounds(10, 44, 210, 20);
         panel.add(examiner);
         examiner.setColumns(10);
 
-        JLabel lblWynikBadania = new JLabel("Wynik badania");
+        lblWynikBadania = new JLabel("Wynik badania");
         lblWynikBadania.setBounds(10, 75, 220, 14);
         panel.add(lblWynikBadania);
 
-        JSpinner examinationValue = new JSpinner();
+        examinationValue = new JSpinner();
         examinationValue.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
         examinationValue.setBounds(10, 100, 210, 20);
         panel.add(examinationValue);
 
-        JButton addExaminationValue = new JButton("Dodaj wynik badań");
+        addExaminationValue = new JButton("Dodaj wynik badań");
         addExaminationValue.setBounds(10, 173, 210, 23);
         addExaminationValue.addActionListener(e -> {
-            for(int row : table.getSelectedRows()){
+            for (int row : table.getSelectedRows()) {
                 model.getExaminations().get(row).setStaffNameAndValue(examiner.getText(), (int) examinationValue.getValue());
             }
             mountValuesFromModel();
         });
         panel.add(addExaminationValue);
-        
+
         if (model != null) {
             mountValuesFromModel();
+
+            setComponentsEnabled(false, firstName, lastName, pesel, zipCode, address1, address2, city, phone, availableExamination, addToExaminations,
+                    removeFromExaminations, searchForPatient, birthDay);
+        } else {
+            setComponentsEnabled(false, examiner, examinationValue, addExaminationValue);
         }
+
+        new JPanelEnchancer(this).standardActions();
     }
 
     public ExaminationRequestModel getModel() {
@@ -332,6 +350,12 @@ public class ExaminationDetails extends JPanel {
         mappingOperation(model, this::setUpSwingComponentValues);
     }
 
+    private void setComponentsEnabled(boolean enabled, JComponent... components) {
+        for (JComponent component : components) {
+            component.setEnabled(enabled);
+        }
+    }
+
     private void mountValuesFromModel() {
         mappingOperation(model, this::setUpSwingComponentValues);
 
@@ -365,6 +389,6 @@ public class ExaminationDetails extends JPanel {
     }
 
     private void setUpSwingComponentValues(Object object, JTextComponent component) {
-        component.setText(object.toString());
+        component.setText(object != null ? object.toString() : "");
     }
 }
