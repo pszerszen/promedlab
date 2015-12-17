@@ -1,5 +1,7 @@
 package com.manager.labo.model;
 
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.manager.labo.utils.DisplayInJTable;
@@ -7,6 +9,7 @@ import com.manager.labo.view.components.TableModelName;
 
 public class ExaminationSummaryModel {
 
+    @Pattern(regexp = "[A-Z]{1}\\d{2}")
     @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 0)
     private String code;
 

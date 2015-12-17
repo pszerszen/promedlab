@@ -3,41 +3,59 @@ package com.manager.labo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.manager.labo.utils.MappingField;
+import com.manager.labo.utils.ValidDate;
 
 public class ExaminationRequestModel {
 
     private Long examinationId;
 
     @MappingField
+    @NotNull(message = "Brak imienia.")
     private String firstName;
 
     @MappingField
+    @NotNull(message = "Brak nazwiska.")
     private String lastName;
 
     @MappingField
+    @Pattern(regexp = "(\\d{11})?", message = "Nieprawidłowy format nr PESEL.")
     private String pesel;
 
     @MappingField
+    @NotNull(message = "Brak daty urodzenia.")
+    @Pattern(regexp = "(\\d{2}-){2}\\d{4}", message = "Nieprawidłowy zapis daty (wymagany format: dd-MM-rrrr)")
+    @ValidDate(message = "Nieprawidłowa data.")
     private String birthDay;
 
     @MappingField
+    @NotNull(message = "Nie wprowadzono adresu.")
     private String address1;
 
     @MappingField
     private String address2;
 
     @MappingField
+    @NotNull(message = "Brak kodu pocztowego.")
+    @Pattern(regexp = "\\d{2}-\\d{3}", message = "Zły format kodu pocztowego")
     private String zipCode;
 
     @MappingField
+    @NotNull(message = "Brak miasta.")
     private String city;
 
     @MappingField
+    @NotNull(message = "Brak nr telefonu")
+    @Pattern(regexp = "(\\(\\+\\d{2}\\))* ?\\d{9}", message = "Zły format telefonu.")
     private String phone;
 
+    @Valid
     private List<ExaminationSummaryModel> examinations;
 
     public Long getExaminationId() {
