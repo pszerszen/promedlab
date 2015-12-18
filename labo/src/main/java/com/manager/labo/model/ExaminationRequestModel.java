@@ -56,7 +56,7 @@ public class ExaminationRequestModel {
     private String phone;
 
     @Valid
-    private List<ExaminationSummaryModel> examinations;
+    private List<ExaminationSummaryModel> examinations = new ArrayList<>();
 
     public Long getExaminationId() {
         return examinationId;

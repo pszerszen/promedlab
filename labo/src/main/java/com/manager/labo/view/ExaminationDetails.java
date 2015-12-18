@@ -223,7 +223,7 @@ public class ExaminationDetails extends JPanel {
         removeFromExaminations.setBounds(717, 281, 230, 23);
         add(removeFromExaminations);
 
-        this.model = model;
+        this.model = Optional.ofNullable(model).orElse(new ExaminationRequestModel());
 
         searchForPatient = new JButton("<html>Szukaj<br/>pacjenta</html>");
         searchForPatient.setBounds(109, 130, 120, 37);

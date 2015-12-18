@@ -4,8 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
@@ -160,7 +164,27 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                         setMainPanel();
                     })
                     .addAction(ActionCommands.EXAMINATION_SUBMIT, e -> {
+                        examinationDetails.loadValuesToModel();
+                        final ExaminationRequestModel model = examinationDetails.getModel();
+                        Set<String> errors = new HashSet<>();
+                        
+                        try {
+                            errors = examinationService.validate(model);
+                            JPanel panel = new JPanel();
+                            panel.add(new JList<>(errors.toArray(new String[errors.size()])));
 
+                            JOptionPane.showMessageDialog(this, panel, "Błędy walidacji.", JOptionPane.ERROR_MESSAGE);
+                        } catch (Exception ex) {
+                            LOGGER.error("Error while validating:", ex);
+                        }
+                        
+                        if (errors.isEmpty()) {
+                            if (model.getExaminationId() == null) {
+                                examinationService.create(model);
+                            } else {
+                                examinationService.update(model);
+                            } 
+                        }
             });
             
         }

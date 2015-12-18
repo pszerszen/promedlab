@@ -1,5 +1,7 @@
 package com.manager.labo.service;
 
+import java.util.Set;
+
 import com.manager.labo.model.ExaminationModel;
 import com.manager.labo.model.ExaminationRequestModel;
 
@@ -14,4 +16,5 @@ public interface ExaminationService extends AbstractService<ExaminationModel>{
     
     void update(ExaminationRequestModel examinationRequestModel);
     
+    Set<String> validate(ExaminationRequestModel model) throws IllegalArgumentException, IllegalAccessException;
 }

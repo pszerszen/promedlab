@@ -34,6 +34,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Long create(Patient patient) {
+        return patientDao.save(patient);
+    }
+
+    @Override
+    public Patient update(Patient patient) {
+        return patientDao.merge(patient);
+    }
+
+    @Override
     public Patient get(Long id) {
         return patientDao.get(id);
     }
@@ -60,9 +70,9 @@ public class PatientServiceImpl implements PatientService {
                 .map(this::convert)
                 .collect(Collectors.toList());
     }
-    
-    private PatientModel convert(Patient patient){
-        if(patient == null){
+
+    private PatientModel convert(Patient patient) {
+        if (patient == null) {
             return null;
         }
         PatientModel model = new PatientModel();
@@ -76,11 +86,11 @@ public class PatientServiceImpl implements PatientService {
         model.setPhone(patient.getPhone());
         model.setZipCode(model.getZipCode());
         model.setCity(patient.getCity());
-        
+
         return model;
     }
-    
-    private Patient convert(PatientModel model){
+
+    private Patient convert(PatientModel model) {
         Patient patient = new Patient();
         patient.setId(model.getId());
         patient.setPesel(model.getPesel());
@@ -92,7 +102,7 @@ public class PatientServiceImpl implements PatientService {
         patient.setPhone(model.getPhone());
         patient.setZipCode(model.getZipCode());
         patient.setCity(model.getCity());
-        
+
         return patient;
     }
 
