@@ -84,7 +84,7 @@ public class PatientServiceImpl implements PatientService {
         model.setAddress1(patient.getAddress1());
         model.setAddress2(patient.getAddress2());
         model.setPhone(patient.getPhone());
-        model.setZipCode(model.getZipCode());
+        model.setZipCode(patient.getZipCode());
         model.setCity(patient.getCity());
 
         return model;

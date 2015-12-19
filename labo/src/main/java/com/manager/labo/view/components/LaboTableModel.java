@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -21,7 +22,7 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
     public LaboTableModel(TableModelName name, String... columns) {
         super(columns, 0);
         this.name = name;
-        modelTable = new HashMap<>();
+        modelTable = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -35,13 +36,13 @@ public class LaboTableModel<M extends Object> extends DefaultTableModel {
     }
 
     @Override
-    public void setNumRows(int rowCount) {
+    public void setRowCount(int rowCount) {
         modelTable.forEach((key, obj) -> {
-            if (key > rowCount) {
+            if (key >= rowCount) {
                 modelTable.remove(key);
             }
         });
-        super.setNumRows(rowCount);
+        super.setRowCount(rowCount);
     }
 
     public void addRows(List<M> models) {

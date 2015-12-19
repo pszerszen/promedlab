@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -113,6 +112,8 @@ public class ExaminationDetails extends JPanel {
     private JButton addExaminationValue;
 
     private JLabel lblDataUrodzenia;
+
+    private JLabel lblGrupaBada;
 
     public ExaminationDetails() {
         this(null);
@@ -229,7 +230,7 @@ public class ExaminationDetails extends JPanel {
         searchForPatient.setBounds(109, 130, 120, 37);
         add(searchForPatient);
 
-        JLabel lblGrupaBada = new JLabel("Grupa badań");
+        lblGrupaBada = new JLabel("Grupa badań");
         lblGrupaBada.setBounds(10, 194, 80, 14);
         add(lblGrupaBada);
 
@@ -291,10 +292,10 @@ public class ExaminationDetails extends JPanel {
         if (model != null) {
             mountValuesFromModel();
 
-            setComponentsEnabled(false, firstName, lastName, pesel, zipCode, address1, address2, city, phone, availableExamination, addToExaminations,
-                    removeFromExaminations, searchForPatient, birthDay);
+            setComponentsEnabled(false, firstName, lastName, pesel, zipCode, address1, address2, city, phone, examinationGroup, availableExamination,
+                    addToExaminations, removeFromExaminations, searchForPatient, birthDay);
         } else {
-            setComponentsEnabled(false, examiner, examinationValue, addExaminationValue);
+            setComponentsEnabled(false, lblWykonujcyBadanie, examiner, lblWynikBadania, examinationValue, addExaminationValue);
         }
 
         new JPanelEnchancer(this).standardActions();
@@ -343,11 +344,18 @@ public class ExaminationDetails extends JPanel {
     }
 
     public void removeSelectedExamiantionFromTable() {
-        examinationTableModel.removeRow(table.getSelectedRow());
+        final int selectedRow = table.getSelectedRow();
+        if (selectedRow > -1) {
+            examinationTableModel.removeRow(selectedRow);
+        }
     }
 
     public void mountValuesFromModel(Object model) {
         mappingOperation(model, this::setUpSwingComponentValues);
+    }
+
+    public void enableExaminationGroup(boolean enable) {
+        setComponentsEnabled(enable && examinationTableModel.getRowCount() < 1, examinationGroup);
     }
 
     private void setComponentsEnabled(boolean enabled, JComponent... components) {
@@ -363,7 +371,7 @@ public class ExaminationDetails extends JPanel {
         examinationTableModel.addRows(model.getExaminations());
     }
 
-    private void mappingOperation(Object model, BiConsumer<Object, JTextComponent> consumer) {
+    private void mappingOperation(Object model, TriConsumer consumer) {
         try {
             for (Field field : model.getClass().getDeclaredFields()) {
                 final MappingField mappingField = field.getAnnotation(MappingField.class);
@@ -373,10 +381,9 @@ public class ExaminationDetails extends JPanel {
                                     mappingField.value().trim()))
                             .orElse(field.getName());
                     field.setAccessible(true);
-                    final Object modelValue = field.get(model);
                     final Field swingField = this.getClass().getDeclaredField(mappingName);
                     swingField.setAccessible(true);
-                    consumer.accept(modelValue, (JTextComponent) swingField.get(this));
+                    consumer.accept(model, field, (JTextComponent) swingField.get(this));
                 }
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
@@ -384,11 +391,27 @@ public class ExaminationDetails extends JPanel {
         }
     }
 
-    private void setUpModelValues(Object object, JTextComponent component) {
-        object = component.getText();
+    private void setUpModelValues(Object model, Field field, JTextComponent component) {
+        try {
+            field.set(model, component.getText());
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setUpSwingComponentValues(Object object, JTextComponent component) {
-        component.setText(object != null ? object.toString() : "");
+    private void setUpSwingComponentValues(Object model, Field field, JTextComponent component) {
+        Object object;
+        try {
+            object = field.get(model);
+            component.setText(object != null ? object.toString() : "");
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FunctionalInterface
+    private interface TriConsumer {
+
+        void accept(Object model, Field field, JTextComponent component);
     }
 }

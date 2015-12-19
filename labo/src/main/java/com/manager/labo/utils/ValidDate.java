@@ -19,7 +19,7 @@ import javax.validation.Constraint;
 @Constraint(validatedBy = {})
 public @interface ValidDate {
 
-    String dateFormat() default "dd-MM-yyyy";
+    String dateFormat() default "yyyy-MM-dd";
     
     String message();
 }

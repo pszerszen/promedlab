@@ -1,12 +1,13 @@
 package com.manager.labo.service.impl;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -132,14 +133,14 @@ public class ExaminationServiceImpl implements ExaminationService {
         }
 
         Pattern patternAnno = field.getAnnotation(Pattern.class);
-        if (patternAnno != null && fieldValue.matches(patternAnno.regexp())) {
+        if (patternAnno != null && !fieldValue.matches(patternAnno.regexp())) {
             return patternAnno.message();
         }
 
         ValidDate validDateAnno = field.getAnnotation(ValidDate.class);
         if (validDateAnno != null) {
             try {
-                LocalDateTime.parse(fieldValue, DateTimeFormatter.ofPattern(validDateAnno.dateFormat()));
+                LocalDate.parse(fieldValue, DateTimeFormatter.ofPattern(validDateAnno.dateFormat()));
             } catch (DateTimeParseException e) {
                 return validDateAnno.message();
             }
@@ -167,6 +168,8 @@ public class ExaminationServiceImpl implements ExaminationService {
         patient.setZipCode(model.getZipCode());
         patient.setCity(model.getCity());
         patient.setPhone(model.getPhone());
+        
+        examiantion.setPatient(patient);
 
         final Set<ExaminationDetails> examinationDetailses = examiantion.getExaminationDetailses();
         final List<ExaminationSummaryModel> examinations = model.getExaminations();
@@ -205,6 +208,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 
         model.setExaminationId(examination.getId());
         model.setPesel(patient.getPesel());
+        model.setBirthDay(DateUtils.fromDate(patient.getBirth()));
         model.setFirstName(patient.getFirstName());
         model.setLastName(patient.getLastName());
         model.setAddress1(patient.getAddress1());
@@ -222,7 +226,7 @@ public class ExaminationServiceImpl implements ExaminationService {
                     summaryModel.setCode(code);
                     summaryModel.setDescription(icdService.getByCode2(code).getName2());
                     summaryModel.setStaffName(examinationDetail.getStaffName());
-                    summaryModel.setValue(examinationDetail.getValue());
+                    summaryModel.setValue(Optional.ofNullable(examinationDetail.getValue()).orElse(0));
                     
                     return summaryModel;
                 })
@@ -241,7 +245,7 @@ public class ExaminationServiceImpl implements ExaminationService {
         model.setPesel(patient.getPesel());
         model.setFirstName(patient.getFirstName());
         model.setLastName(patient.getLastName());
-        model.setAddress(new StringJoiner(" ").add(patient.getAddress1()).add(patient.getAddress2()).toString());
+        model.setAddress(new StringJoiner(" ").add(patient.getAddress1()).add(Strings.nullToEmpty(patient.getAddress2())).toString());
         model.setPhone(patient.getPhone());
 
         return model;

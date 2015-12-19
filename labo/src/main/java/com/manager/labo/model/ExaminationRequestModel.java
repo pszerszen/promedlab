@@ -14,45 +14,69 @@ import com.manager.labo.utils.ValidDate;
 
 public class ExaminationRequestModel {
 
+    private static final String ZŁY_FORMAT_TELEFONU = "Zły format telefonu.";
+
+    private static final String ZŁY_FORMAT_KODU_POCZTOWEGO = "Zły format kodu pocztowego";
+
+    private static final String BRAK_NR_TELEFONU = "Brak nr telefonu";
+
+    private static final String BRAK_MIASTA = "Brak miasta.";
+
+    private static final String BRAK_KODU_POCZTOWEGO = "Brak kodu pocztowego.";
+
+    private static final String NIE_WPROWADZONO_ADRESU = "Nie wprowadzono adresu.";
+
+    private static final String NIEPRAWIDŁOWA_DATA = "Nieprawidłowa data.";
+
+    private static final String NIEPRAWIDŁOWY_ZAPIS_DATY = "Nieprawidłowy zapis daty (wymagany format: dd-MM-rrrr)";
+
+    private static final String BRAK_DATY_URODZENIA = "Brak daty urodzenia.";
+
+    private static final String NIEPRAWIDŁOWY_FORMAT_NR_PESEL = "Nieprawidłowy format nr PESEL.";
+
+    private static final String BRAK_NAZWISKA = "Brak nazwiska.";
+
+    private static final String BRAK_IMIENIA = "Brak imienia.";
+
     private Long examinationId;
 
     @MappingField
-    @NotNull(message = "Brak imienia.")
+    @NotNull(message = BRAK_IMIENIA)
     private String firstName;
 
     @MappingField
-    @NotNull(message = "Brak nazwiska.")
+    @NotNull(message = BRAK_NAZWISKA)
     private String lastName;
 
     @MappingField
-    @Pattern(regexp = "(\\d{11})?", message = "Nieprawidłowy format nr PESEL.")
+    @Pattern(regexp = "(\\d{11})?", message = NIEPRAWIDŁOWY_FORMAT_NR_PESEL)
     private String pesel;
 
     @MappingField
-    @NotNull(message = "Brak daty urodzenia.")
-    @Pattern(regexp = "(\\d{2}-){2}\\d{4}", message = "Nieprawidłowy zapis daty (wymagany format: dd-MM-rrrr)")
-    @ValidDate(message = "Nieprawidłowa data.")
+    @NotNull(message = BRAK_DATY_URODZENIA)
+    @Pattern(regexp = "\\d{4}(-\\d{2}){2}", message = NIEPRAWIDŁOWY_ZAPIS_DATY)
+    @ValidDate(message = NIEPRAWIDŁOWA_DATA)
     private String birthDay;
 
     @MappingField
-    @NotNull(message = "Nie wprowadzono adresu.")
+    @NotNull(message = NIE_WPROWADZONO_ADRESU)
     private String address1;
 
     @MappingField
     private String address2;
 
     @MappingField
-    @NotNull(message = "Brak kodu pocztowego.")
-    @Pattern(regexp = "\\d{2}-\\d{3}", message = "Zły format kodu pocztowego")
+    @NotNull(message = BRAK_KODU_POCZTOWEGO)
+    @Pattern(regexp = "\\d{2}-\\d{3}", message = ZŁY_FORMAT_KODU_POCZTOWEGO)
     private String zipCode;
 
     @MappingField
-    @NotNull(message = "Brak miasta.")
+    @NotNull(message = BRAK_MIASTA)
     private String city;
 
     @MappingField
-    @NotNull(message = "Brak nr telefonu")
-    @Pattern(regexp = "(\\(\\+\\d{2}\\))* ?\\d{9}", message = "Zły format telefonu.")
+    @NotNull(message = BRAK_NR_TELEFONU)
+    @Pattern(regexp = "(\\(\\+\\d{2}\\))* ?\\d{9}", message = ZŁY_FORMAT_TELEFONU)
     private String phone;
 
     @Valid

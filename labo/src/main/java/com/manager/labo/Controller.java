@@ -12,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -155,10 +156,12 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                     })
                     .addAction(ActionCommands.REMOVE_FROM_EXAMINATIONS, e -> {
                         examinationDetails.removeSelectedExamiantionFromTable();
+                        examinationDetails.enableExaminationGroup(true);
                     })
                     .addAction(ActionCommands.ADD_TO_EXAMINATIONS, e -> {
                         final Icd icd = icdService.getByCode2(examinationDetails.getCurrentExamination());
                         examinationDetails.addExaminationDetail(new ExaminationSummaryModel(icd.getCode2(), icd.getName2()));
+                        examinationDetails.enableExaminationGroup(false);
                     })
                     .addAction(ActionCommands.EXIT, e -> {
                         setMainPanel();
@@ -170,10 +173,11 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                         
                         try {
                             errors = examinationService.validate(model);
-                            JPanel panel = new JPanel();
-                            panel.add(new JList<>(errors.toArray(new String[errors.size()])));
-
-                            JOptionPane.showMessageDialog(this, panel, "Błędy walidacji.", JOptionPane.ERROR_MESSAGE);
+                            if (CollectionUtils.isNotEmpty(errors)) {
+                                JPanel panel = new JPanel();
+                                panel.add(new JList<>(errors.toArray(new String[errors.size()])));
+                                JOptionPane.showMessageDialog(this, panel, "Błędy walidacji.", JOptionPane.ERROR_MESSAGE);
+                            }
                         } catch (Exception ex) {
                             LOGGER.error("Error while validating:", ex);
                         }
@@ -185,6 +189,7 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                                 examinationService.update(model);
                             } 
                         }
+                        setExaminationList();
             });
             
         }
