@@ -36,7 +36,7 @@ import com.manager.labo.view.components.JPanelEnchancer;
 public class Controller extends JFrame implements ActionListener, WindowListener {
 
     private static final long serialVersionUID = -8827922871122450688L;
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 
     private MainPanel mainPanel;
@@ -57,12 +57,12 @@ public class Controller extends JFrame implements ActionListener, WindowListener
 
     public Controller() {
         super("PRO-LAB-MANAGER");
-        
+
         context = new ClassPathXmlApplicationContext("applicationContext.xml");
         icdService = context.getBean(IcdService.class);
         patientService = context.getBean(PatientService.class);
         examinationService = context.getBean(ExaminationService.class);
-        
+
         setMainPanel();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -170,9 +170,9 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                         examinationDetails.loadValuesToModel();
                         final ExaminationRequestModel model = examinationDetails.getModel();
                         Set<String> errors = new HashSet<>();
-                        
+                        final boolean newExamination = model.getExaminationId() == null;
                         try {
-                            errors = examinationService.validate(model);
+                            errors = examinationService.validate(model, !newExamination);
                             if (CollectionUtils.isNotEmpty(errors)) {
                                 JPanel panel = new JPanel();
                                 panel.add(new JList<>(errors.toArray(new String[errors.size()])));
@@ -181,17 +181,18 @@ public class Controller extends JFrame implements ActionListener, WindowListener
                         } catch (Exception ex) {
                             LOGGER.error("Error while validating:", ex);
                         }
-                        
+
                         if (errors.isEmpty()) {
-                            if (model.getExaminationId() == null) {
+                            if (newExamination) {
                                 examinationService.create(model);
                             } else {
                                 examinationService.update(model);
-                            } 
+                            }
+                            setExaminationList();
                         }
-                        setExaminationList();
-            });
-            
+
+                    });
+
         }
         setCurrentPanel(examinationDetails);
     }

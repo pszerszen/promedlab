@@ -1,5 +1,6 @@
 package com.manager.labo.model;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,9 +19,11 @@ public class ExaminationSummaryModel {
     @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 1)
     private String description;
 
+    @NotNull(message = "Nie wpisano wykonującego badania.")
     @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 2)
     private String staffName;
 
+    @NotNull(message = "Należy uzupełnić wartość badania.")
     @DisplayInJTable(name = TableModelName.EXAMINATIONS_SET, order = 3)
     private int value;
 

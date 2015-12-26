@@ -49,7 +49,7 @@ public class ValidationTest {
 
     @Test
     public void testValidation() throws IllegalArgumentException, IllegalAccessException {
-        assertValidationErrors(examinationService.validate(model));
+        assertValidationErrors(examinationService.validate(model, false));
     }
 
     private void assertValidationErrors(Collection<String> validationErrors, String... expectedValidationErrors) {

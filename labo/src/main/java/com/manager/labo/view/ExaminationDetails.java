@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultFormatter;
 import javax.swing.text.JTextComponent;
 
 import org.slf4j.Logger;
@@ -277,6 +279,10 @@ public class ExaminationDetails extends JPanel {
         examinationValue = new JSpinner();
         examinationValue.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
         examinationValue.setBounds(10, 100, 210, 20);
+        final JComponent editor = examinationValue.getEditor();
+        JFormattedTextField formattedTextField = (JFormattedTextField) editor.getComponent(0);
+        DefaultFormatter formatter = (DefaultFormatter) formattedTextField.getFormatter();
+        formatter.setCommitsOnValidEdit(true);
         panel.add(examinationValue);
 
         addExaminationValue = new JButton("Dodaj wynik badań");

@@ -17,6 +17,8 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,8 @@ import com.manager.labo.utils.ValidDate;
 @Transactional
 @Service
 public class ExaminationServiceImpl implements ExaminationService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExaminationServiceImpl.class);
 
     @Autowired
     private ExaminationDao examinationDao;
@@ -106,24 +110,41 @@ public class ExaminationServiceImpl implements ExaminationService {
     }
  
     @Override
-    public Set<String> validate(ExaminationRequestModel model) throws IllegalArgumentException, IllegalAccessException {
+    public Set<String> validate(ExaminationRequestModel model, boolean validateExamiantions) throws IllegalArgumentException, IllegalAccessException {
         Set<String> errors = Sets.newHashSet();
 
         for (Field field : model.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            final Object objectVal = field.get(model);
-            String fieldValue = objectVal == null ? "" :objectVal.toString();
-
-            String error = validateField(field, fieldValue);
-            if (error != null) {
-                errors.add(error);
-            }
+            extractAndValidateField(field, model, errors);
         }
-        if (CollectionUtils.isEmpty(model.getExaminations())) {
+        final List<ExaminationSummaryModel> examinations = model.getExaminations();
+        if (CollectionUtils.isEmpty(examinations)) {
             errors.add("Należy wybrać przynajmniej jedno badanie.");
+        }
+        
+        if(validateExamiantions){
+            examinations.forEach(examination -> {
+                for(Field field : examination.getClass().getDeclaredFields()){
+                    try {
+                        extractAndValidateField(field, examination, errors);
+                    } catch (Exception e) {
+                        LOGGER.error("Error while validating.", e);
+                    }
+                }
+            });
         }
 
         return errors;
+    }
+    
+    private void extractAndValidateField(Field field, Object object, Set<String> errors) throws IllegalArgumentException, IllegalAccessException{
+        field.setAccessible(true);
+        final Object objectVal = field.get(object);
+        String fieldValue = objectVal == null ? "" :objectVal.toString();
+
+        String error = validateField(field, fieldValue);
+        if (error != null) {
+            errors.add(error);
+        }
     }
 
     private String validateField(Field field, String fieldValue) {

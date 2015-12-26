@@ -16,5 +16,5 @@ public interface ExaminationService extends AbstractService<ExaminationModel>{
     
     void update(ExaminationRequestModel examinationRequestModel);
     
-    Set<String> validate(ExaminationRequestModel model) throws IllegalArgumentException, IllegalAccessException;
+    Set<String> validate(ExaminationRequestModel model, boolean validateExamiantions) throws IllegalArgumentException, IllegalAccessException;
 }
